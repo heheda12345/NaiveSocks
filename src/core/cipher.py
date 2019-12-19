@@ -16,22 +16,27 @@ class Cipher:
         It just shifts one step to make a simply encryption, encode and decode.
     """
 
-    def __init__(self, encodePassword: bytearray,
-                 decodePassword: bytearray) -> None:
-        self.encodePassword = encodePassword.copy()
-        self.decodePassword = decodePassword.copy()
+    # def __init__(self, encodePassword: bytearray,
+    #              decodePassword: bytearray) -> None:
+    #     self.encodePassword = encodePassword.copy()
+    #     self.decodePassword = decodePassword.copy()
+
+    def __init__(self, password):
+        self.password = password
 
     def encode(self, bs: bytearray):
-        for i, v in enumerate(bs):
-            bs[i] = self.encodePassword[v]
+        return
+        # for i, v in enumerate(bs):
+        #     bs[i] = self.encodePassword[v]
 
     def decode(self, bs: bytearray):
-        for i, v in enumerate(bs):
-            bs[i] = self.decodePassword[v]
+        return
+        # for i, v in enumerate(bs):
+        #     bs[i] = self.decodePassword[v]
 
-    @classmethod
-    def NewCipher(cls, encodePassword: bytearray):
-        decodePassword = encodePassword.copy()
-        for i, v in enumerate(encodePassword):
-            decodePassword[v] = i
-        return cls(encodePassword, decodePassword)
+    # @classmethod
+    # def NewCipher(cls, encodePassword: bytearray):
+    #     decodePassword = encodePassword.copy()
+    #     for i, v in enumerate(encodePassword):
+    #         decodePassword[v] = i
+    #     return cls(encodePassword, decodePassword)

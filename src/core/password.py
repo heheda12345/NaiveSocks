@@ -20,6 +20,7 @@ def validatePassword(password: bytearray) -> bool:
 
 
 def loadsPassword(passwordString: str) -> bytearray:
+    return passwordString
     try:
         password = base64.urlsafe_b64decode(
             passwordString.encode('utf8', errors='strict'))

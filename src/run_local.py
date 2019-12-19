@@ -1,18 +1,21 @@
 import argparse
-import asyncio
 import sys
 
 from core.password import InvalidPasswordError, loadsPassword
+from core.local import LocalServer
 from utils import config as lsConfig
-
+from utils.utils import NetAddr
 
 def run_local(config: lsConfig.Config):
-    print(config)
+    local = LocalServer(config.password,
+                        NetAddr(config.localAddr,config.localPort),
+                        NetAddr(config.serverAddr, config.serverPort))
+    local.start()
 
 
 def main():
     parser = argparse.ArgumentParser(
-        description='A light tunnel proxy that helps you bypass firewalls')
+        description='A naive tunnel proxy that helps you bypass firewalls')
     parser.add_argument(
         '--version',
         action='store_true',
@@ -41,7 +44,7 @@ def main():
         metavar='LOCAL_ADDR',
         help='local binding address, default: 127.0.0.1')
     proxy_options.add_argument(
-        '-l', metavar='LOCAL_PORT', type=int, help='local port, default: 1080')
+        '-l', metavar='LOCAL_PORT', type=int, help='local port, default: 2333')
     proxy_options.add_argument('-k', metavar='PASSWORD', help='password')
 
     args = parser.parse_args()
@@ -103,7 +106,7 @@ def main():
         config = config._replace(localAddr='127.0.0.1')
 
     if config.localPort is None:
-        config = config._replace(localPort=1080)
+        config = config._replace(localPort=2333)
 
     if config.serverPort is None:
         config = config._replace(serverPort=8388)

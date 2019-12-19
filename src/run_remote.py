@@ -4,11 +4,15 @@ import sys
 
 from core.password import (InvalidPasswordError, dumpsPassword,
                                       loadsPassword, randomPassword)
+from core.remote import RemoteServer
 from utils import config as lsConfig
+from utils.utils import NetAddr
 
 
-def run_server(config: lsConfig.Config):
-    print(config)
+def run_remote(config: lsConfig.Config):
+    remote = RemoteServer(config.password,
+                          NetAddr(config.serverAddr, config.serverPort))
+    remote.start()
 
 
 def main():
@@ -99,7 +103,7 @@ def main():
         with open(args.save, 'w', encoding='utf-8') as f:
             lsConfig.dump(f, config)
 
-    run_server(config)
+    run_remote(config)
 
 
 if __name__ == '__main__':
