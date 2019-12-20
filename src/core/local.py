@@ -25,16 +25,21 @@ class LocalServer(MySocket):
             print("Listening to {} port {}...".format(self.localAddr.Addr, self.localAddr.Port))
             while True:
                 con, addr = await self.loop.sock_accept(listener)
-                print('Receive (%s:%d)', *addr)
+                print('Connect to {}:{} Succ!'.format(*addr))
                 asyncio.ensure_future(self.handle(con))
         loop.stop()
 
     async def handle(self, con: socket.socket):
         remote = await self.connectToRemote()
-        def cleanup(task):
+        def cleanUp(task):
             print("closeed!")
             con.close()
-        asyncio.ensure_future(self.encode(con, remote)).add_done_callback(cleanup)
+        asyncio.ensure_future(
+            asyncio.gather(
+                asyncio.ensure_future(self.encodeCopy(con, remote)),
+                asyncio.ensure_future(self.decodeCopy(remote, con)),
+                loop=self.loop,
+                return_exceptions=True)).add_done_callback(cleanUp)
 
     async def connectToRemote(self):
         try:

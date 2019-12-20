@@ -21,26 +21,32 @@ class MySocket:
         await self.loop.sock_sendall(dst, data)
         print("end!")
 
+    async def encodeOne(self, dst: socket.socket, data: bytearray):
+        print("[Encoder-One] . -> {}:{} {}".format(*dst.getsockname(), data))
+        self.cipher.encode(data)
+        await self.send(dst, data)
 
-    async def encode(self, src: socket.socket, dst: socket.socket):
+    async def encodeCopy(self, src: socket.socket, dst: socket.socket):
         while (True):
             data = await self.recv(src)
             if not data:
+                print("No more data")
                 break
-            print("[Encoder] %s:%d %s", *src.getsockname(), data)
+            print("[Encoder] {}:{} -> {}:{} {}".format(*src.getsockname(), *dst.getsockname(), data))
             self.cipher.encode(data)
             await self.send(dst, data)
 
     async def decodeOne(self, src: socket.socket):
         data = await self.recv(src)
         self.cipher.decode(data)
+        print("[Decoder-One] {}:{} -> . {}" .format(*src.getsockname(), data))
         return data
 
-    async def decode(self, src: socket.socket):
+    async def decodeCopy(self, src: socket.socket, dst: socket.socket):
         while (True):
             data = await self.recv(src)
             if not data:
                 break
             self.cipher.decode(data)
-            print("[Decoder] %s:%d %s", *src.getsockname(), data)
-            # await self.send(dst, data)
+            print("[Decoder] {}:{} -> {}:{} {}".format(*src.getsockname(), *dst.getsockname(), data))
+            await self.send(dst, data)

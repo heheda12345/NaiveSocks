@@ -11,3 +11,11 @@ run_local.py, run_server.py, utils/config.py
 ```
 cipher.py, password.py
 ```
+
+暂时没有做数据完整性保护
+
+使用示例：
+```
+python run_remote.py -k abc -s 127.0.0.1
+python run_local.py -k abs -s 127.0.0.1 # 应该改成远程服务器地址
+```
