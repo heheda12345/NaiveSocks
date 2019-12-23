@@ -3,11 +3,9 @@ import typing
 from collections import namedtuple
 from urllib.parse import urlparse
 
-from core.password import (InvalidPasswordError, dumpsPassword,
-                                      loadsPassword)
+from core.password import (InvalidPasswordError, dumpsPassword, loadsPassword)
 
-Config = namedtuple('Config',
-                    'serverAddr serverPort localAddr localPort password')
+Config = namedtuple('Config', 'serverAddr serverPort localAddr localPort password key')
 
 
 class InvalidURLError(Exception):
