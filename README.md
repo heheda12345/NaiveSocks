@@ -14,6 +14,6 @@ python client.py -k abc -s 127.0.0.1
 python server.py -k abc -s 127.0.0.1
 ```
 
-可以通过添加 `--help` 选项了解其他选项的使用方法。
+可以通过添加 `--help` 选项了解具体选项的使用方法。
 
 参考设计：https://github.com/linw1995/lightsocks-python
