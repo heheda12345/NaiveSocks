@@ -29,7 +29,7 @@ class MySocket:
 
     async def encodeCopy(self, src: socket.socket, dst: socket.socket):
         while (True):
-            data = await self.recv(src, BUFFER_SIZE - 1)
+            data = await self.recv(src, BUFFER_SIZE - 16)
             if not data:
                 # print("No more data")
                 break

@@ -27,13 +27,20 @@ class Cipher:
     #     self.decodePassword = decodePassword.copy()
 
     def __init__(self, key):
-        self.key = bytes(key[:16])
-        self.IV = bytes(key[-16:])
-        self.mode = AES.MODE_CBC
+        # self.key = bytes(key[:16])
+        # self.IV = bytes(key[-16:])
+        # self.mode = AES.MODE_CBC
+        self.S = bytearray(range(256))
+        for idx in key:
+            self.S = self.S[idx:idx+1] + self.S[:idx] + self.S[idx+1:]
+        
+        self.T = bytearray(range(256))
+        for i in range(256):
+            self.T[self.S[i]] = i
         
     def encode(self, bs: bytearray):
-        try:
-            cryptor = AES.new(bytes(self.key), self.mode, self.IV)
+        # try:
+        #     cryptor = AES.new(bytes(self.key), self.mode, self.IV)
             # ciphertext = cryptor.encrypt(bs)
             # self.ciphertext = cryptor.encrypt(pad(text))
             # md5 = MD5.new()
@@ -42,20 +49,25 @@ class Cipher:
             # print(type(bs))
             # print(bs[0])
             # print(bs[0])
-            # for i, v in enumerate(bs):
-            #     bs[i] = v ^ 1
+        for i, v in enumerate(bs):
+            bs[i] = self.S[v]
             # AES()
             # return self.cryptor.encrypt(bs)
-            padding = 16 - len(bs) % 16
-            for _ in range(padding):
-                bs.append(padding)
-            pass
-        except Exception as e:
-            print(e)
-        return cryptor.encrypt(bytes(bs))
+        #     padding = 16 - len(bs) % 16
+        #     for _ in range(padding):
+        #         bs.append(padding)
+        #     pass
+        # except Exception as e:
+        #     print(e)
+        # return cryptor.encrypt(bytes(bs))
+        # try:
+        #     bs = b'a' * 16 + bs
+        # except Exception as e:
+        #     print(e)
+        return bs
 
     def decode(self, bs: bytearray):
-        cryptor = AES.new(bytes(self.key), self.mode, self.IV)
+        # cryptor = AES.new(bytes(self.key), self.mode, self.IV)
         # md5 = MD5.new()
         # md5.update(bs[16:])
         # for i, v in enumerate(md5.digest()):
@@ -73,13 +85,16 @@ class Cipher:
         # print(len(bs))
         # print(type(self.cryptor.decrypt(bytes(bs))))
         # print(len(self.cryptor.decrypt(bytes(bs))))
-        bs = bytearray(cryptor.decrypt(bytes(bs)))
-        padding = bs[-1]
-        if padding < 1 or padding > 16:
-            raise Exception
-        for _ in range(padding):
-            if bs.pop() != padding:
-                raise Exception
+        # bs = bytearray(cryptor.decrypt(bytes(bs)))
+        # padding = bs[-1]
+        # if padding < 1 or padding > 16:
+        #     raise Exception
+        # for _ in range(padding):
+        #     if bs.pop() != padding:
+        #         raise Exception
+        
+        for i, v in enumerate(bs):
+            bs[i] = self.T[v]
         return bs
 
     # @classmethod
