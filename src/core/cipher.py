@@ -1,5 +1,5 @@
 
-from Crypto.Hash import MD5
+from Crypto.Cipher import AES
 
 class MD5InconformityError(Exception):
     """MD5值不一致"""
@@ -26,25 +26,38 @@ class Cipher:
     #     self.encodePassword = encodePassword.copy()
     #     self.decodePassword = decodePassword.copy()
 
-    def __init__(self, password):
-        self.password = password
+    def __init__(self, key):
+        self.key = bytes(key[:16])
+        self.IV = bytes(key[-16:])
+        self.mode = AES.MODE_CBC
         
     def encode(self, bs: bytearray):
-        # md5 = MD5.new()
-        # md5.update(bytes(bs))
-        # bs = bytearray(md5.digest()) + bs
-        # bs = b'a' + bs
-        # bs[0] ^= 1
-        # print(type(bs))
-        # print(bs[0])
-        # print(bs[0])
-        # for i, v in enumerate(bs):
-        #     bs[i] = v ^ 1
-        return bs
+        try:
+            cryptor = AES.new(bytes(self.key), self.mode, self.IV)
+            # ciphertext = cryptor.encrypt(bs)
+            # self.ciphertext = cryptor.encrypt(pad(text))
+            # md5 = MD5.new()
+            # md5.update(bs)
+            # bs[0] ^= 1
+            # print(type(bs))
+            # print(bs[0])
+            # print(bs[0])
+            # for i, v in enumerate(bs):
+            #     bs[i] = v ^ 1
+            # AES()
+            # return self.cryptor.encrypt(bs)
+            padding = 16 - len(bs) % 16
+            for _ in range(padding):
+                bs.append(padding)
+            pass
+        except Exception as e:
+            print(e)
+        return cryptor.encrypt(bytes(bs))
 
     def decode(self, bs: bytearray):
+        cryptor = AES.new(bytes(self.key), self.mode, self.IV)
         # md5 = MD5.new()
-        # md5.update(bytes(bs[16:]))
+        # md5.update(bs[16:])
         # for i, v in enumerate(md5.digest()):
         #     if bs[i] != v:
         #         raise MD5InconformityError
@@ -56,6 +69,17 @@ class Cipher:
         #     bs[i] = v ^ 1
         # print(bs[0])
         # print(bs[0])
+        # return self.cryptor.decrypt(bs)
+        # print(len(bs))
+        # print(type(self.cryptor.decrypt(bytes(bs))))
+        # print(len(self.cryptor.decrypt(bytes(bs))))
+        bs = bytearray(cryptor.decrypt(bytes(bs)))
+        padding = bs[-1]
+        if padding < 1 or padding > 16:
+            raise Exception
+        for _ in range(padding):
+            if bs.pop() != padding:
+                raise Exception
         return bs
 
     # @classmethod
