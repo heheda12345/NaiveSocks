@@ -75,7 +75,7 @@ def main():
 
     if args.k:
         try:
-            password = loadsPassword(args.k)
+            password = args.k
             config = config._replace(password=password)
         except InvalidPasswordError:
             parser.print_usage()

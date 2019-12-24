@@ -1,4 +1,9 @@
-# TODO change it!
+
+from Crypto.Hash import MD5
+
+class MD5InconformityError(Exception):
+    """MD5值不一致"""
+
 class Cipher:
     """
         Cipher class is for the encipherment of data flow.
@@ -23,16 +28,38 @@ class Cipher:
 
     def __init__(self, password):
         self.password = password
-
+        
     def encode(self, bs: bytearray):
-        return
+        # md5 = MD5.new()
+        # md5.update(bs)
+        # bs = md5.digest() + bs
+        # bs = b'a' + bs
+        # bs[0] ^= 1
+
+        print(bs[0])
+        bs[0] = bs[0]
+        print(bs[0])
         # for i, v in enumerate(bs):
-        #     bs[i] = self.encodePassword[v]
+        #     bs[i] = v
+        return
 
     def decode(self, bs: bytearray):
-        return
+        # md5 = MD5.new()
+        # md5.update(bs[16:])
+        # print(len(bs))
+        # print(md5.hexdigest())
+        # for i, v in enumerate(md5.digest()):
+        #     if bs[i] != v:
+        #         raise MD5InconformityError
+        # bs = bs[1:]
+        # bs[0] ^= 1
+
         # for i, v in enumerate(bs):
-        #     bs[i] = self.decodePassword[v]
+        #     bs[i] = v
+        print(bs[0])
+        bs[0] = bs[0]
+        print(bs[0])
+        return
 
     # @classmethod
     # def NewCipher(cls, encodePassword: bytearray):

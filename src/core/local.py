@@ -6,8 +6,8 @@ import socket
 import logging
 
 class LocalServer(MySocket):
-    def __init__(self, password, localAddr: NetAddr, remoteAddr: NetAddr):
-        super().__init__(password)
+    def __init__(self, key, localAddr: NetAddr, remoteAddr: NetAddr):
+        super().__init__(key)
         self.localAddr = localAddr
         self.remoteAddr = remoteAddr
 

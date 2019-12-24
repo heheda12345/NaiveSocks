@@ -1,12 +1,12 @@
 import socket
 import logging
-from core.cipher import Cipher
+from core.cipher import Cipher, MD5InconformityError
 
 BUFFER_SIZE = 1024
 
 class MySocket:
-    def __init__(self, password):
-        self.cipher = Cipher(password)
+    def __init__(self, key):
+        self.cipher = Cipher(key)
 
     def set_loop(self, loop):
         self.loop = loop

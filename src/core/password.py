@@ -2,12 +2,10 @@
     this module is for producing a valid password
     that for Cipher to encode and decode the data flow.
 """
-# TODO change it!
-import random
 import base64
+import os
 
 PASSWORD_LENGTH = 256
-IDENTITY_PASSWORD = bytearray(range(256))
 
 
 class InvalidPasswordError(Exception):
@@ -15,15 +13,25 @@ class InvalidPasswordError(Exception):
 
 
 def validatePassword(password: bytearray) -> bool:
-    return len(password) == PASSWORD_LENGTH and len(
-        set(password)) == PASSWORD_LENGTH
+    return len(password) == PASSWORD_LENGTH
 
 
 def loadsPassword(passwordString: str) -> bytearray:
-    return passwordString
     try:
-        password = base64.urlsafe_b64decode(
-            passwordString.encode('utf8', errors='strict'))
+        password = base64.urlsafe_b64decode(passwordString.encode('utf8', errors='strict'))
+        password = bytearray(password)
+    except:
+        raise InvalidPasswordError
+
+    if not validatePassword(password):
+        raise InvalidPasswordError
+
+    return password
+
+
+def loadPassword(passwordString: bytearray) -> bytearray:
+    try:
+        password = base64.urlsafe_b64decode(passwordString)
         password = bytearray(password)
     except:
         raise InvalidPasswordError
@@ -40,7 +48,11 @@ def dumpsPassword(password: bytearray) -> str:
     return base64.urlsafe_b64encode(password).decode('utf8', errors='strict')
 
 
+def dumpPassword(password: bytearray) -> bytearray:
+    if not validatePassword(password):
+        raise InvalidPasswordError
+    return base64.urlsafe_b64encode(password)
+
+
 def randomPassword() -> bytearray:
-    password = IDENTITY_PASSWORD.copy()
-    random.shuffle(password)
-    return password
+    return os.urandom(PASSWORD_LENGTH)

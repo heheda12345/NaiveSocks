@@ -5,8 +5,8 @@ import asyncio
 import socket
 
 class RemoteServer(MySocket):
-    def __init__(self, password, addr: NetAddr):
-        super().__init__(password)
+    def __init__(self, key, addr: NetAddr):
+        super().__init__(key)
         self.addr = addr
 
     def start(self):
