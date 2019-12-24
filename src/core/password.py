@@ -5,7 +5,7 @@
 import base64
 import os
 
-PASSWORD_LENGTH = 256
+PASSWORD_LENGTH = 32
 
 
 class InvalidPasswordError(Exception):

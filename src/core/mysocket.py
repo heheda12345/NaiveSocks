@@ -43,25 +43,25 @@ class MySocket:
                 # print("No more data")
                 break
             # print("[Encoder] {}:{} -> {}:{} {}".format(*src.getsockname(), *dst.getsockname(), data))
-            h = MD5.new()
-            h.update(data)
-            print('encodeCopy', h.hexdigest())
+            # h = MD5.new()
+            # h.update(data)
+            # print('encodeCopy', h.hexdigest())
             data = bytes(self.cipher.encode(bytearray(data)))
-            h = MD5.new()
-            h.update(data)
-            print('encodeCopy', h.hexdigest())
+            # h = MD5.new()
+            # h.update(data)
+            # print('encodeCopy', h.hexdigest())
             await self.send(dst, struct.pack("H", len(data)))
             await self.send(dst, data)
 
     async def decodeOne(self, src: socket.socket):
         data = await self._recv(src)
-        h = MD5.new()
-        h.update(data)
-        print('decodeOne', h.hexdigest())
+        # h = MD5.new()
+        # h.update(data)
+        # print('decodeOne', h.hexdigest())
         data = bytes(self.cipher.decode(bytearray(data)))
-        h = MD5.new()
-        h.update(data)
-        print('decodeOne', h.hexdigest())
+        # h = MD5.new()
+        # h.update(data)
+        # print('decodeOne', h.hexdigest())
         # print("[Decoder-One] {}:{} -> . {}" .format(*src.getsockname(), data))
         return data
 
@@ -70,12 +70,15 @@ class MySocket:
             data = await self._recv(src)
             if not data:
                 break
-            h = MD5.new()
-            h.update(data)
-            print('decodeCopy', h.hexdigest())
-            data = bytes(self.cipher.decode(bytearray(data)))
-            h = MD5.new()
-            h.update(data)
-            print('decodeCopy', h.hexdigest())
+            # h = MD5.new()
+            # h.update(data)
+            # print('decodeCopy', h.hexdigest())
+            try:
+                data = bytes(self.cipher.decode(bytearray(data)))
+            except MD5InconformityError:
+                continue
+            # h = MD5.new()
+            # h.update(data)
+            # print('decodeCopy', h.hexdigest())
             # print("[Decoder] {}:{} -> {}:{} {}".format(*src.getsockname(), *dst.getsockname(), data))
             await self.send(dst, data)

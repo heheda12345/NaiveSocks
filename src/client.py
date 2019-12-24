@@ -119,7 +119,7 @@ def main():
     elif config.password:
         h = SHA256.new()
         h.update(config.password.encode('utf-8'))
-        key = h.digest() * 8
+        key = h.digest()
     else:
         parser.print_usage()
         print('need PASSWORD or KEY, please use [-k PASSWORD] [-e KEY]')

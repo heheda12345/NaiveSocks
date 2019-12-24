@@ -100,7 +100,7 @@ def main():
     elif config.password:
         h = SHA256.new()
         h.update(config.password.encode('utf-8'))
-        key = h.digest() * 8
+        key = h.digest()
     elif args.random:
         print('generate random password')
         key = randomPassword()
