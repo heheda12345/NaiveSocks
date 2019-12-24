@@ -23,7 +23,7 @@ class MySocket:
 
     async def encodeOne(self, dst: socket.socket, data: bytearray):
         print("[Encoder-One] . -> {}:{} {}".format(*dst.getsockname(), data))
-        self.cipher.encode(data)
+        data = bytes(self.cipher.encode(bytearray(data)))
         await self.send(dst, data)
 
     async def encodeCopy(self, src: socket.socket, dst: socket.socket):
@@ -33,12 +33,12 @@ class MySocket:
                 print("No more data")
                 break
             print("[Encoder] {}:{} -> {}:{} {}".format(*src.getsockname(), *dst.getsockname(), data))
-            self.cipher.encode(data)
+            data = bytes(self.cipher.encode(bytearray(data)))
             await self.send(dst, data)
 
     async def decodeOne(self, src: socket.socket):
         data = await self.recv(src)
-        self.cipher.decode(data)
+        data = bytes(self.cipher.decode(bytearray(data)))
         print("[Decoder-One] {}:{} -> . {}" .format(*src.getsockname(), data))
         return data
 
@@ -47,6 +47,6 @@ class MySocket:
             data = await self.recv(src)
             if not data:
                 break
-            self.cipher.decode(data)
+            data = bytes(self.cipher.decode(bytearray(data)))
             print("[Decoder] {}:{} -> {}:{} {}".format(*src.getsockname(), *dst.getsockname(), data))
             await self.send(dst, data)
